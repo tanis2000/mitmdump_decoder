@@ -14,13 +14,7 @@ var realtime = L.realtime({url: 'get_map_objects.json', type: 'json'}, {
   style: function(feature) { return feature.properties; },
   pointToLayer: simplestyle,
 
-  filter: function(feature) {
-    if (!loaded) {
-      return true;
-    }
-    var box = document.getElementById(feature.properties.type);
-    return box == null || box.checked;
-  },
+  filter: applyFilter,
   onEachFeature: function (feature, layer) {
     layer.bindPopup(feature.properties.title);
   }
@@ -41,13 +35,7 @@ var player = L.realtime({url: 'player.json', type: 'json'}, {
   style: function(feature) { return feature.properties; },
   pointToLayer: simplestyle,
 
-  filter: function(feature) {
-    if (!loaded) {
-      return true;
-    }
-    var box = document.getElementById(feature.properties.type);
-    return box == null || box.checked;
-  },
+  filter: applyFilter,
   onEachFeature: function (feature, layer) {
     layer.bindPopup(feature.properties.title);
   }
@@ -80,4 +68,12 @@ function simplestyle(f, latlon) {
             popupAnchor: [sizes[size][0] / 2, 0]
         })
     });
+}
+
+function applyFilter(feature) {
+  if (!loaded) {
+    return true;
+  }
+  var box = document.getElementById(feature.properties.type);
+  return box == null || box.checked;
 }
